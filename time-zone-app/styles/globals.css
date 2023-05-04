@@ -23,7 +23,7 @@ body {
 }
 
 :root {
-  --card-height: 10em;
+  --card-height: 20em;
   --card-width: 25em;
 }
 
@@ -47,26 +47,17 @@ body {
   position: relative;
   border-radius: 6px;
   justify-content: center;
-  align-items: center;
-  text-align: center;
+  /* text-align: center; */
   display: flex;
   font-size: 1.5em;
   color: rgb(88 199 250 / 100%);
-  cursor: pointer;
 }
-
-.card:hover {
-  color: rgb(88 199 250 / 100%);
-  animation: none;
-}
-
-
 
 
 .card::before {
   content: "";
-  width: 104%;
-  height: 102%;
+  width: 102%;
+  height: 104%;
   border-radius: 8px;
   background-image: linear-gradient(
     var(--rotate)
@@ -77,6 +68,9 @@ body {
     animation: spin 2.5s linear infinite;
 }
 
+.active{
+  border-color:rgb(59 130 246 ) !important;; 
+}
 
 @keyframes spin {
   0% {
