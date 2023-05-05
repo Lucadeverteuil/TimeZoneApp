@@ -5,13 +5,21 @@ import $ from 'jquery'
 import 'select2'; 
 import 'select2/dist/css/select2.min.css';
 const inter = Inter({ subsets: ['latin'] })
+import axios from 'axios';
 export default function Home() {
   // State to keep track of which button is active
 /-------------------------------------------------/
-const [time, setTime] = useState(true); //checks to see if time button is active
+const [time, setTime] = useState(String);
+const [Timeop, setTimeop] = useState(true); //checks to see if time button is active
 const [convertTime, setConvertTime] = useState(false); //checks to see if convertTime button is active
 const [place1, setPlace1] = useState(""); //checks to see if convertTime button is active
-const [place2, setPlace2] = useState('New York'); //checks to see if convertTime button is active
+const [place1Time , setPlace1Time] = useState(0); //checks to see if convertTime button is active
+const [place2, setPlace2] = useState(''); //checks to see if convertTime button is active
+const [place2Time , setPlace2Time] = useState(0); //checks to see if convertTime button is active
+const [Country, setCountry] = useState([]); //checks to see if convertTime button is active
+const [zoneName, setZoneName] = useState([]); //checks to see if convertTime button is active
+const [recieved, setRecived] = useState(false); //checks to see if convertTime button is active
+
 
 
 
@@ -32,6 +40,7 @@ const [place2, setPlace2] = useState('New York'); //checks to see if convertTime
     });
   }
  
+  //chnage place 1 value 
   useEffect(() => {
     $('.test').select2()
 
@@ -44,12 +53,56 @@ const [place2, setPlace2] = useState('New York'); //checks to see if convertTime
     return () => {
       $('.test').off('select2:select')
     }
+
+    
   }, [])
+
+  useEffect(() => {
+    const apiKey = 'OAWPEEA4O00N';
+    // const latitude = 37.7749; // example latitude value
+    // const longitude = -122.4194; // example longitude value
+  
+    axios
+      .get(`http://api.timezonedb.com/v2.1/list-time-zone?key=${apiKey}&format=json`)
+      .then((response) => {
+        const countryNames = response.data.zones.map((zones: { zoneName: any; }) => zones.zoneName);
+         setCountry(countryNames);
+         setRecived(true);
+
+
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+
+  useEffect(() => {
+    const apiKey = 'OAWPEEA4O00N';
+    // const latitude = 37.7749; // example latitude value
+    // const longitude = -122.4194; // example longitude value
+  
+    axios
+      .get(`http://api.timezonedb.com/v2.1/get-time-zone?key=${apiKey}&format=json&by=zone&zone=${place1}`)
+      .then((response) => {
+        const timestamp = response.data.formatted;
+
+         setTime(timestamp.toString())
+         setRecived(true);
+
+
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [place1]);
+
+
+
 
   return (
     <main> 
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
       <h1 className= "header-title mb-4 text-4xl text-center font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl text-[#C0C0C0]">Time Zone App</h1>
 
       
@@ -65,22 +118,21 @@ const [place2, setPlace2] = useState('New York'); //checks to see if convertTime
             
             <div className='flex'>
               {
-            time ?
+                
+            Timeop ?
             <div className="card">  
             <div>
               <form className='flex absolute left-3 top-3' > 
                 <label htmlFor="Place" className='mx-3'>Place: </label>
                 <select className=" test w-40" name="state" value = {place1} > 
-                  <option value="New York">New York</option>
-                  <option value="London">London</option>
-                  <option value="Tokyo">Tokyo</option>
-                  <option value="Sydney">Sydney</option>
+                {recieved ? Country.map((country: any) =>{return(
+                  <option key={country} value={country}>{country}</option>)}): null}
                 </select>
               </form>
               </div>
               <div className='flex absolute right-3 top-3'>
-                City: {place1} <br/>
-                time: 00:00:00
+               <p className='block'> Time: {time} </p> <br></br>
+                {/* <p className='block'>{new Date(Date.now() + place1Time * 1000).toLocaleTimeString()}</p> */}
               </div>
               </div> 
               : 
