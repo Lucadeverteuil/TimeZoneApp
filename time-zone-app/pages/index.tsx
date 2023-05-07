@@ -122,17 +122,17 @@ const [recieved, setRecived] = useState(false); //checks to see if convertTime b
             Timeop ?
             <div className="card">  
             <div>
-              <form className='flex absolute left-3 top-3' > 
-                <label htmlFor="Place" className='mx-3'>Place: </label>
-                <select className=" test w-40" name="state" value = {place1} > 
+              <form className='flex absolute left-3 top-5' > 
+                <label htmlFor="Place" className='mx-20'>Place: </label>
+                <select className="block test w-40" name="state" value = {place1} > 
                 {recieved ? Country.map((country: any) =>{return(
                   <option key={country} value={country}>{country}</option>)}): null}
                 </select>
               </form>
               </div>
-              <div className='flex absolute right-3 top-3'>
-               <p className='block'> Time: {time} </p> <br></br>
-                {/* <p className='block'>{new Date(Date.now() + place1Time * 1000).toLocaleTimeString()}</p> */}
+              <br/>
+              <div className='flex absolute left-3 top-20'> <br></br>
+               <p className='mx-20'> Time: <div className='inline-block mx-3'>{time}</div> </p> <br></br>
               </div>
               </div> 
               : 
